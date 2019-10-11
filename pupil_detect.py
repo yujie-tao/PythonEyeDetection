@@ -28,7 +28,7 @@ def draw_circle_for_feature(image, feature, color=255, thickness=1):
     cv2.circle(image, (int(feature.pt[0]), int(feature.pt[1])), int(feature.size/2), color, thickness)
 
 def find_pupil(gray_image, minsize=.1, maxsize=.5):
-    detector = cv2.FeatureDetector_create('MSER')
+    detector = cv2.ORB_create() 
     features_all = detector.detect(gray_image)
     features_big = [feature for feature in features_all if feature.size > gray_image.shape[0]*minsize]
     features_small = [feature for feature in features_big if feature.size < gray_image.shape[0]*maxsize]

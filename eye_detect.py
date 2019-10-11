@@ -11,7 +11,7 @@ eyeCascadeClassifier = cv2.CascadeClassifier("haarcascade_eye.xml")
 def detect_objects(image, objectClassifier, divider=4):
     #increase divider for more speed, less accuracy
     gray_image = cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
-    small_image = cv2.resize(gray_image, (gray_image.shape[1]/divider,gray_image.shape[0]/divider))
+    small_image = cv2.resize(gray_image, (int(gray_image.shape[1]/divider),int(gray_image.shape[0]/divider)))
     min_object_size = (20,20)
     haar_scale = 1.2
     min_neighbors = 2
@@ -52,7 +52,7 @@ def draw(photo):
     if eye_image is not None:
         eye_histogram = [0]*256
         eye_image = cv2.cvtColor(eye_image, cv2.COLOR_RGB2GRAY)
-        for i in xrange(256):
+        for i in range(256):
             value_count = (eye_image == i).sum()
             eye_histogram[i] = value_count
         count = 0
@@ -68,7 +68,7 @@ def draw(photo):
     ####### Look for circle (the iris). Save coordinates. ########
     relative_iris_coordinates = None
     if binary_eye_image is not None:
-        eye_circles = cv2.HoughCircles(binary_eye_image, cv2.cv.CV_HOUGH_GRADIENT, 3, 500, maxRadius = binary_eye_image.shape[0]/5)
+        eye_circles = cv2.HoughCircles(binary_eye_image, int(cv2.HOUGH_GRADIENT), 3, 500, maxRadius = int(binary_eye_image.shape[0]/5))
         if eye_circles is not None:
             #Usually gets the job done. Messy.
             circle = eye_circles[0][0]
@@ -105,7 +105,7 @@ def draw(photo):
     if iris_image is not None:
         iris_gray = cv2.cvtColor(iris_image, cv2.COLOR_RGB2GRAY)
         iris_circles_image = iris_image.copy()
-        iris_circles = cv2.HoughCircles(iris_gray, cv2.cv.CV_HOUGH_GRADIENT, 2, 100)
+        iris_circles = cv2.HoughCircles(iris_gray, cv2.HOUGH_GRADIENT, 2, 100)
         if iris_circles is not None:
             circle=iris_circles[0][0]
             cv2.circle(iris_circles_image, (circle[0], circle[1]), circle[2], (255,0,0), thickness=2)
